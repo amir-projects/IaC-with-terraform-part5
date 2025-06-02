@@ -125,17 +125,13 @@ module "ec2-instance" {
     },
   ]
   depends_on = [module.rds]
+  
 }
 
 
 resource "null_resource" "provision_ec2" {
   depends_on = [module.ec2-instance, module.rds]
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = file("${path.module}/ssh-keys/id_ed25519")
-    host        = module.ec2-instance.public_ip
-  }
+
   provisioner "remote-exec" {
     inline = [
       "set -e",
@@ -160,8 +156,16 @@ resource "null_resource" "provision_ec2" {
       "if grep -q '^VITE_API_URL=' .env; then sed -i 's|^VITE_API_URL=.*|VITE_API_URL=http://${module.ec2-instance.public_ip}:3000|' .env; else echo 'VITE_API_URL=http://${module.ec2-instance.public_ip}:3000' >> .env; fi",
       "pm2 start \"npm run dev -- --host 0.0.0.0\" --name react-app"
     ]
+
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = file("${path.module}/ssh-keys/id_ed25519")
+      host        = module.ec2-instance.public_ip
+    }
   }
 }
+
 
 
 module "rds-security-group" {
