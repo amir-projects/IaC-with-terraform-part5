@@ -50,9 +50,23 @@ ssh-keygen -t ed25519 -C ""
 > 🔐 You can leave the passphrase empty (press Enter twice)
 
 
-### 3. Prepare the configuration
+### 3. Configure the AWS Provider
 
-- Update the `profile` value in the `provider` block inside `provider.tf`
+Before deploying the infrastructure, you need to configure the AWS provider with your credentials.
+
+1. Open the `provider.tf` file located in the root directory of the project.
+2. Update the `profile` attribute with your AWS CLI profile name (e.g., `default`, `dev`, or any named profile you’ve set up in `~/.aws/credentials`).
+3. Optionally, update the `region` attribute to your preferred AWS region (for example, `us-east-1`, `us-west-2`, etc.).
+
+Example configuration:
+
+```hcl
+provider "aws" {
+  region  = "us-west-2"    # Replace with your preferred AWS region code
+  profile = "yourmentors"  # Replace this with your actual profile name
+}
+```
+> ⚠️ Ensure that the specified AWS profile has sufficient IAM permissions to create and manage resources like VPCs, EC2 instances, and RDS databases.
 
 ### 4. Initialize the project
 
