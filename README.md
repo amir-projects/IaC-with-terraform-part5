@@ -70,6 +70,8 @@ provider "aws" {
 
 ### 4. Initialize the project
 
+Before applying the Terraform configuration, initialize the project to download required providers and set up the backend:
+
 ```bash
 terraform init
 ```
