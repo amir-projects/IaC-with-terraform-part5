@@ -47,7 +47,7 @@ cd ssh-keys
 ssh-keygen -t ed25519 -C ""
 ```
 > 💡 When prompted for a file location, type the filename as: `id_ed25519`  
-> 🔐 You can leave the passphrase empty (press Enter twice) — this is optional but simplifies automation. Avoid doing this in production environments.
+> 🔐 You can leave the passphrase empty (press Enter twice)
 
 
 ### 3. Prepare the configuration
