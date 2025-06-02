@@ -18,12 +18,6 @@ Make sure you have the following installed and configured:
 
 - ✅ **Terraform** (Latest Version)  
 - ✅ **AWS CLI** (with credentials configured via `~/.aws/credentials`)  
-- ✅ **SSH key pairs** generated and stored locally  
-
-**Naming convention for SSH keys:**
-
-- 🔑 Public Key: `id_ed25519.pub`  
-- 🔒 Private Key: `id_ed25519`  
 
 ---
 
@@ -31,25 +25,38 @@ Make sure you have the following installed and configured:
 
 Follow these steps to deploy the infrastructure:
 
-### 1. Clone the terraform repository
+### 1. Clone the Terraform Repository
 
 ```bash
-git clone https://github.com/your-org/full-stack-crud-project-with-react-node-mysql-iac.git
-cd full-stack-crud-project-with-react-node-mysql-iac
+git clone https://github.com/amir-projects/IaC-with-terraform-part5.git
+
+cd IaC-with-terraform-part5
 ```
 
-### 2. Prepare the configuration
+### 2. Prepare Your SSH Keys
+
+Ensure you have SSH key pairs generated with the following naming convention:
+
+- 🔑 **Public Key**: `id_ed25519.pub`
+- 🔒 **Private Key**: `id_ed25519`
+
+If you haven’t generated the keys yet, you can do so directly inside the `ssh-keys/` directory by running:
+
+```bash
+cd ssh-keys
+ssh-keygen -t ed25519 -C ""
+```
+### 3. Prepare the configuration
 
 - Update the `profile` value in the `provider` block inside `provider.tf`
-- Place your generated SSH key pairs into the `ssh-keys/` directory
 
-### 3. Initialize the project
+### 4. Initialize the project
 
 ```bash
 terraform init
 ```
 
-### 4. Apply the configuration
+### 5. Apply the configuration
 
 ```bash
 terraform apply
