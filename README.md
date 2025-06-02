@@ -1,29 +1,31 @@
-📦 Terraform Project: THREE-TIER-FULL-STACK-APP
-📝 Overview
-This Terraform project provisions a three-tier full stack application infrastructure on AWS, consisting of:
+# 📦 Terraform Project: THREE-TIER-FULL-STACK-APP
 
-A VPC with public and private subnets
+## 📝 Overview
 
-An EC2 instance for application tiers
+This Terraform project provisions a **three-tier full stack application infrastructure on AWS**, consisting of:
 
-A managed RDS database instance
+- A VPC with public and private subnets  
+- EC2 instances for application tiers  
+- A managed RDS database instance  
 
-The infrastructure is designed using Terraform best practices.
+The infrastructure is designed using **Terraform best practices**.
 
-🔧 Prerequisites
+---
+
+## 🔧 Prerequisites
+
 Make sure you have the following installed and configured:
 
-✅ Terraform Latest Version
+- ✅ **Terraform** (Latest Version)  
+- ✅ **AWS CLI** (with credentials configured via `~/.aws/credentials`)  
+- ✅ **SSH key pairs** generated and stored locally  
 
-✅ AWS CLI (with credentials configured via ~/.aws/credentials)
+**Naming convention for SSH keys:**
 
-✅ SSH key pairs generated and stored locally
+- 🔑 Public Key: `id_ed25519.pub`  
+- 🔒 Private Key: `id_ed25519`  
 
-Naming convention for SSH keys:
-
-🔑 Public Key: id_ed25519.pub
-
-🔒 Private Key: id_ed25519
+---
 
 ## 🚀 Usage
 
