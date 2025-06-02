@@ -124,13 +124,18 @@ module "ec2-instance" {
       volume_size = 50
     },
   ]
-
+  depends_on = [module.rds]
 }
 
 
 resource "null_resource" "provision_ec2" {
   depends_on = [module.ec2-instance, module.rds]
-
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("${path.module}/ssh-keys/id_ed25519")
+    host        = module.ec2-instance.public_ip
+  }
   provisioner "remote-exec" {
     inline = [
       "set -e",
@@ -155,13 +160,6 @@ resource "null_resource" "provision_ec2" {
       "if grep -q '^VITE_API_URL=' .env; then sed -i 's|^VITE_API_URL=.*|VITE_API_URL=http://${module.ec2-instance.public_ip}:3000|' .env; else echo 'VITE_API_URL=http://${module.ec2-instance.public_ip}:3000' >> .env; fi",
       "pm2 start \"npm run dev -- --host 0.0.0.0\" --name react-app"
     ]
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = file("${path.module}/ssh-keys/id_ed25519")
-      host        = module.ec2-instance.public_ip
-    }
   }
 }
 
@@ -194,26 +192,26 @@ module "rds" {
   source  = "terraform-aws-modules/rds/aws"
   version = "6.12.0"
 
-  identifier                  = "three-tier-platform-database"
-  engine                      = "mysql"
-  engine_version              = "8.0"
-  family                      = "mysql8.0"
-  major_engine_version        = "8.0"
-  instance_class              = "db.t3.micro"
-  create_db_parameter_group   = false
-  allocated_storage           = 10
-  max_allocated_storage       = 100
-  db_name                     = "crud_operations"
-  username                    = "admin"
+  identifier                = "three-tier-platform-database"
+  engine                    = "mysql"
+  engine_version            = "8.0"
+  family                    = "mysql8.0"
+  major_engine_version      = "8.0"
+  instance_class            = "db.t3.micro"
+  create_db_parameter_group = false
+  allocated_storage         = 10
+  max_allocated_storage     = 100
+  db_name                   = "crud_operations"
+  username                  = "admin"
   # password                    = "User12345random25!"
-  port                        = 3306
-  multi_az                    = false
-  deletion_protection         = false
+  port                = 3306
+  multi_az            = false
+  deletion_protection = false
   # manage_master_user_password = false
-  create_db_subnet_group      = true
-  subnet_ids                  = module.vpc.private_subnets
-  skip_final_snapshot         = true
-  vpc_security_group_ids      = [module.rds-security-group.security_group_id]
+  create_db_subnet_group = true
+  subnet_ids             = module.vpc.private_subnets
+  skip_final_snapshot    = true
+  vpc_security_group_ids = [module.rds-security-group.security_group_id]
 }
 
 
