@@ -82,9 +82,38 @@ module "ec2-instance" {
   }
 }
 
+locals {
+  db_host_cleaned = replace(var.rds_instance_endpoint, ":3306", "")
+}
+
 resource "null_resource" "provision_ec2" {
-  provisioner "local-exec" {
-    command = "echo Hello, World!"
+  depends_on = [module.ec2-instance]
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update",
+      "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -",
+      "sudo apt install -y nodejs git",
+      "sudo npm install pm2@latest -g",
+      "git clone https://github.com/amir-projects/full-stack-crud-project-with-react-node-mysql",
+      "cd full-stack-crud-project-with-react-node-mysql/server",
+      "npm install --quiet",
+      "cp .env.example .env",
+      "sed -i \"s|^DB_HOST=.*|DB_HOST=\\\"${local.db_host_cleaned}\\\"|\" .env",
+      "sed -i \"s|^DB_USER=.*|DB_USER=\\\"admin\\\"|\" .env",
+      "sed -i \"s|^DB_PASSWORD=.*|DB_PASSWORD=\\\"User12345random25!\\\"|\" .env",
+      "if ! pm2 list | grep -q '^api-server'; then PORT=3000 pm2 start index.js --name api-server --watch; else echo 'pm2 api-server already running, skipping start'; fi",
+      "cd ../frontend",
+      "npm install --quiet",
+      "cp .env.example .env",
+      "if grep -q '^VITE_API_URL=' .env; then sed -i 's|^VITE_API_URL=.*|VITE_API_URL=http://${module.ec2-instance.public_ip}:3000|' .env; else echo 'VITE_API_URL=http://${module.ec2-instance.public_ip}:3000' >> .env; fi",
+      "if ! pm2 list | grep -q '^react-app'; then pm2 start \"npm run dev -- --host 0.0.0.0\" --name react-app; else echo 'pm2 react-app already running, skipping start'; fi"
+    ]
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = file("${path.root}/ssh-keys/id_ed25519")
+      host        = module.ec2-instance.public_ip
+    }
   }
 
   triggers = {
