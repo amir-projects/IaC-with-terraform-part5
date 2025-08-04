@@ -44,7 +44,7 @@ If you haven’t generated the keys yet, you can do so directly inside the `ssh-
 
 ```bash
 cd ssh-keys
-ssh-keygen -t ed25519 -C ""
+ssh-keygen -t ed25519 -C "" -f ./id_ed25519
 ```
 > 💡 When prompted for a file location, type the filename as: `id_ed25519`  
 > 🔐 You can leave the passphrase empty (press Enter twice)
