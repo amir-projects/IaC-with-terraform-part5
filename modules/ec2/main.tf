@@ -81,3 +81,13 @@ module "ec2-instance" {
     encrypted = true
   }
 }
+
+resource "null_resource" "provision_ec2" {
+  provisioner "local-exec" {
+    command = "echo Hello, World!"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
