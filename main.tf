@@ -152,6 +152,5 @@ module "rds" {
   private_subnets       = module.vpc.private_subnets
   vpc_cidr_block        = module.vpc.vpc_cidr_block
   ec2_security_group_id = module.ec2.security_group_id
-
 }
 

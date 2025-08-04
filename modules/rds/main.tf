@@ -35,30 +35,31 @@ module "security-group" {
   ]
 }
 
-/*
+
 module "rds" {
   source  = "terraform-aws-modules/rds/aws"
   version = "6.12.0"
 
-  identifier                = "three-tier-platform-database"
-  engine                    = "mysql"
-  engine_version            = "8.0"
-  family                    = "mysql8.0"
-  major_engine_version      = "8.0"
-  instance_class            = "db.t3.micro"
-  create_db_parameter_group = false
-  allocated_storage         = 10
-  max_allocated_storage     = 100
-  db_name                   = "crud_operations"
-  username                  = "admin"
-  # password                    = "User12345random25!"
-  port                = 3306
-  multi_az            = false
-  deletion_protection = false
-  # manage_master_user_password = false
-  create_db_subnet_group = true
-  subnet_ids             = var.private_subnets
-  skip_final_snapshot    = true
-  vpc_security_group_ids = [module.rds-security-group.security_group_id]
+  identifier                  = "three-tier-platform-database"
+  engine                      = "mysql"
+  engine_version              = "8.0"
+  family                      = "mysql8.0"
+  major_engine_version        = "8.0"
+  instance_class              = "db.t3.micro"
+  create_db_parameter_group   = false
+  allocated_storage           = 20
+  max_allocated_storage       = 100
+  create_db_subnet_group      = true
+  db_name                     = "crud_operations"
+  username                    = "admin"
+  password                    = "User12345random25!"
+  manage_master_user_password = false
+  port                        = 3306
+  multi_az                    = false
+  deletion_protection         = false
+  subnet_ids                  = var.private_subnets
+  skip_final_snapshot         = true
+  vpc_security_group_ids      = [module.security-group.security_group_id]
+  publicly_accessible         = false
+  storage_type                = "gp3"
 }
-*/
